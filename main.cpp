@@ -3,18 +3,39 @@
 #include <vector>
 #include <algorithm>
 #include <string>
+#include <map>
+
+auto escape_map = std::map{
+    std::pair{'\'', '\''},
+    {'\"', '\"'},
+    {'\?', '\?'},
+    {'\\', '\\'},
+    {'\a', 'a'},
+    {'\b', 'b'},
+    {'\f', 'f'},
+    {'\n', 'n'},
+    {'\r', 'r'},
+    {'\t', 't'},
+    {'\v', 'v'},
+};
 
 constexpr auto escape_characters = std::array{
 '\'', '\"', '\?', '\\', '\a', '\b', '\f', '\n', '\r', '\t', '\v'
+};
+constexpr auto escape_control_characters = std::array{
+'\a', '\b', '\f', '\n', '\r', '\t', '\v'
 };
 
 std::string text_to_c_string(std::string text) {
     std::vector<char> buf{};
     for (auto c : text) {
-        if (std::ranges::contains(escape_characters, c)) {
+        if (escape_map.contains(c)) {
             buf.emplace_back('\\');
+            buf.emplace_back(escape_map[c]);
         }
-        buf.emplace_back(c);
+        else {
+            buf.emplace_back(c);
+        }
     }
 
     return std::string{buf.begin(), buf.end()};
