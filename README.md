@@ -1,0 +1,1 @@
+Simple tool used to convert text to C string
